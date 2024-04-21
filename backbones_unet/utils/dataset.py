@@ -10,7 +10,7 @@ class SemanticSegmentationDataset(Dataset):
     def __init__(self, 
                  img_paths, 
                  mask_paths=None,
-                 size=(256, 256),
+                 size=(224, 224),
                  mode='binary',
                  normalize=None):
         """
@@ -82,7 +82,8 @@ class SemanticSegmentationDataset(Dataset):
         img = Image.open(img_path).convert("RGB")
         img = img.resize((self.size[0], self.size[1])) 
         img = torch.Tensor(np.array(img, dtype=np.uint8).transpose((2, 0, 1)))
-        print("Reached1!")
+        img = img.float() / 255.0
+        #print("Reached1!")
         if self.mask_paths is not None:
             mask_path = self.mask_paths[index]
             mask = Image.open(mask_path)
@@ -94,12 +95,15 @@ class SemanticSegmentationDataset(Dataset):
             else: 
                 mask = self._multi_class_mask(mask)
 
-            mask = torch.squeeze(torch.as_tensor(mask, dtype=torch.uint8))
+            mask = torch.as_tensor(mask, dtype=torch.uint8)
             mask = mask[...,3]
-            print("Reached2!")
+            #print(mask.shape)
+            #print("Reached2!")
             if self.normalize: 
+                #print("Reached3")
                 img = self.normalize(img)
-                mask = self.normalize(mask)
+                #mask = self.normalize(mask)
+            #print(mask.shape)
             return img, mask
         else:
             if self.normalize: img = self.normalize(img)
