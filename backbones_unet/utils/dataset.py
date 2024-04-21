@@ -94,6 +94,7 @@ class SemanticSegmentationDataset(Dataset):
                 mask = self._multi_class_mask(mask)
 
             mask = torch.squeeze(torch.as_tensor(mask, dtype=torch.uint8))
+            mask = mask[...,3]
             if self.normalize: 
                 img = self.normalize(img)
                 mask = self.normalize(mask)
