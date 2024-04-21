@@ -129,9 +129,11 @@ class SemanticSegmentationDataset(Dataset):
         def natural_keys(text):
             return [atoi(c) for c in re.split('(\d+)',text)]
 
+        directories = []
         for roots,dirs,files in os.walk(directory):               
             if files:
-                directories = [roots + os.sep + file for file in  files]
-                directories.sort(key=natural_keys)
+                directories.extend(os.path.join(roots, file) for file in files)
+        
+        directories.sort(key=natural_keys)
 
         return directories
