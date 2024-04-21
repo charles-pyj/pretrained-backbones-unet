@@ -82,6 +82,7 @@ class SemanticSegmentationDataset(Dataset):
         img = Image.open(img_path).convert("RGB")
         img = img.resize((self.size[0], self.size[1])) 
         img = torch.Tensor(np.array(img, dtype=np.uint8).transpose((2, 0, 1)))
+        print("Reached1!")
         if self.mask_paths is not None:
             mask_path = self.mask_paths[index]
             mask = Image.open(mask_path)
@@ -95,6 +96,7 @@ class SemanticSegmentationDataset(Dataset):
 
             mask = torch.squeeze(torch.as_tensor(mask, dtype=torch.uint8))
             mask = mask[...,3]
+            print("Reached2!")
             if self.normalize: 
                 img = self.normalize(img)
                 mask = self.normalize(mask)
